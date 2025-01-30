@@ -1,0 +1,91 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+AddElementTag("internal", $borderColor="#061038", $fontColor="#ffffff")
+AddElementTag("external", $fontColor="#ffffff")
+
+System_Boundary(s1, "Система компании") {
+    
+    Container_Boundary(API_Gateway, "API Gateway") {
+        Container(ClientAPI, "Клиентский API", "Внешний API для взаимодействия с системой")
+    }
+    
+    Container_Boundary(OnlineStore, "Интернет-магазин") {
+        Container(ProductAPI, "API Каталога", "Управляет категориями, фильтрацией, поиском")
+        Container(ProductCategories, "Управление категориями товаров")
+        Container(ProductFilter, "Фильтрация товаров")
+        Container(Recommendations, "Рекомендательные системы")
+        ContainerDb(Database_1, "База данных", "PostgreSQL", "Хранит информацию о товарах")
+    }
+
+    Container_Boundary(OrderProcessing, "Система управления заказами") {
+        Container(OrderAPI, "API Заказов", "Управляет корзиной и заказами")
+        Container(CartManagement, "Управление корзиной")
+        Container(OrderProcessing_1, "Процессинг заказов")
+        Container(OrderHistory, "История покупок")
+        ContainerDb(Database_2, "База данных", "MySQL", "Хранит информацию о заказах")
+    }
+
+    Container_Boundary(PaymentService, "Платежная система") {
+        Container(PaymentAPI, "API Платежей", "Обработка платежей и бонусов")
+        Container(DiscountAndBonus, "Обработка платежей")
+        Container(DiscountAndBonus_1, "Начисление бонусов и скидок")
+        ContainerDb(Database_4, "База данных", "PostgreSQL", "Хранит информацию о платежах")
+    }
+
+    Container_Boundary(InventorySystem, "Складская система") {
+        Container(InventoryAPI, "API Склада", "Управление товарами на складе")
+        Container(OwnWarehouse, "Собственные склады")
+        Container(SupplierWarehouse, "Склады поставщиков")
+        Container(ProductReservation, "Резервирование товаров")
+        ContainerDb(Database_3, "База данных", "MongoDB", "Хранит остатки товаров")
+    }
+
+    Container_Boundary(DeliveryService, "Служба доставки") {
+        Container(DeliveryAPI, "API Доставки", "Управляет процессом доставки")
+        Container(OwnDelivery, "Собственная доставка")
+        Container(PartnerDelivery, "Партнерская доставка")
+        Container(Tracking, "Трекинг заказов")
+        ContainerDb(Database_5, "База данных", "Redis", "Хранит информацию о статусе доставки")
+    }
+}
+
+System_Boundary(s2, "Внешние системы") {
+    Container_Ext(ExternalPayment, "Платежные шлюзы", "Stripe, PayPal, СБП")
+    Container_Ext(SupplierSystem, "Системы поставщиков", "Получение информации о товарах и их остатках")
+    Container_Ext(ExternalLogistics, "Логистические операторы", "Доставка через партнеров")
+}
+
+Rel(ClientAPI, ProductAPI, "Запрос данных о товарах")
+Rel(ClientAPI, OrderAPI, "Создание и просмотр заказов")
+Rel(ClientAPI, PaymentAPI, "Обработка платежей")
+Rel(ClientAPI, DeliveryAPI, "Отслеживание доставки")
+
+Rel(ProductAPI, ProductCategories, "Управление категориями")
+Rel(ProductAPI, ProductFilter, "Фильтрация товаров")
+Rel(ProductAPI, Recommendations, "Генерация рекомендаций")
+Rel(ProductAPI, Database_1, "Хранение данных о товарах")
+
+Rel(OrderAPI, CartManagement, "Добавление в корзину")
+Rel(OrderAPI, OrderProcessing_1, "Оформление заказа")
+Rel(OrderAPI, OrderHistory, "Хранение истории покупок")
+Rel(OrderAPI, Database_2, "Хранение данных о заказах")
+
+Rel(PaymentAPI, DiscountAndBonus, "Обработка платежей")
+Rel(PaymentAPI, DiscountAndBonus_1, "Применение скидок")
+Rel(PaymentAPI, Database_4, "Хранение данных о платежах")
+Rel(PaymentAPI, ExternalPayment, "Интеграция с платежными шлюзами")
+
+Rel(InventoryAPI, OwnWarehouse, "Управление складом компании")
+Rel(InventoryAPI, SupplierWarehouse, "Интеграция с внешними складами")
+Rel(InventoryAPI, ProductReservation, "Резервирование товаров")
+Rel(InventoryAPI, Database_3, "Хранение данных о складе")
+Rel(InventoryAPI, SupplierSystem, "Получение информации от поставщиков")
+
+Rel(DeliveryAPI, OwnDelivery, "Управление собственной доставкой")
+Rel(DeliveryAPI, PartnerDelivery, "Интеграция с партнёрской логистикой")
+Rel(DeliveryAPI, Tracking, "Отслеживание статусов")
+Rel(DeliveryAPI, Database_5, "Хранение данных о доставке")
+Rel(DeliveryAPI, ExternalLogistics, "Интеграция с логистическими партнерами")
+
+@enduml

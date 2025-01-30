@@ -1,0 +1,39 @@
+
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+AddElementTag("internal", $borderColor="#061038", $fontColor="#ffffff")
+AddElementTag("external", $fontColor="#ffffff")
+
+Person(Customer, "Клиент", "Покупает товары онлайн или в магазине")
+Person(Employee, "Сотрудник", "Работает в магазине или на складе")
+
+System_Boundary(s1, "Система компании") {
+    System(OnlineStore, "Интернет-магазин", "Витрина, каталог товаров")
+    System(OrderProcessing, "Система управления заказами", "Обрабатывает заказы, возвраты")
+    System(PaymentService, "Платежная система", "Обрабатывает платежи, скидки, бонусы")
+    System(InventorySystem, "Складская система", "Управление запасами")
+    System(DeliveryService, "Служба доставки", "Организует доставку")
+    System(CRM, "CRM-система", "Управление клиентами, аналитика")
+}
+
+System_Boundary(s2, "Внешние системы") {
+    System_Ext(ExternalPayment, "Платежные шлюзы", "Stripe, PayPal, СБП")
+    System_Ext(SupplierSystem, "Системы поставщиков", "Обновляют наличие товаров")
+    System_Ext(ExternalLogistics, "Логистические партнеры", "Доставка через партнеров")
+    System_Ext(MarketingTools, "Маркетинг и аналитика", "Google Analytics, Mailchimp")
+}
+
+Rel(Customer, OnlineStore, "Оформляет заказы")
+Rel(Customer, DeliveryService, "Получает доставку")
+Rel(Employee, InventorySystem, "Следит за наличием товаров")
+Rel(Employee, CRM, "Анализирует данные клиентов")
+Rel(OnlineStore, OrderProcessing, "Передает заказы")
+
+
+Rel(PaymentService, ExternalPayment, "Интеграция с платежными системами")
+Rel(InventorySystem, SupplierSystem, "Получает данные о товарах")
+Rel(DeliveryService, ExternalLogistics, "Отправляет заказы")
+Rel(CRM, MarketingTools, "Передает данные о клиентах")
+
+@enduml
