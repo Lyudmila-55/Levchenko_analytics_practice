@@ -2,90 +2,161 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 AddElementTag("internal", $borderColor="#061038", $fontColor="#ffffff")
-AddElementTag("external", $fontColor="#ffffff")
+AddElementTag("external", $borderColor="#808080", $fontColor="#ffffff")
+AddElementTag("database", $borderColor="#B52E31", $fontColor="#ffffff", $bgColor="#8F262A")
 
+Person(Customer, "Покупатель", "Совершает покупки в интернет-магазине или оффлайн")
+Person(Employee, "Сотрудник магазина", "Работает с заказами, складами, клиентами")
+
+'Основная система магазига
 System_Boundary(s1, "Система компании") {
-    
-    Container_Boundary(API_Gateway, "API Gateway") {
-        Container(ClientAPI, "Клиентский API", "Внешний API для взаимодействия с системой")
+    Container_Boundary(OnlineStore, "Каталог товаров") {
+        Container(ProductService, "Сервис управления товарами", "Работа с товарами, фильтры, поиск")
+        ContainerDb(ProductDB, "БД товаров", "Хранит информацию о товарах")
+        Container(API_1, "API-шлюз", "Точка входа для клиентов")
     }
     
-    Container_Boundary(OnlineStore, "Интернет-магазин") {
-        Container(ProductAPI, "API Каталога", "Управляет категориями, фильтрацией, поиском")
-        Container(ProductCategories, "Управление категориями товаров")
-        Container(ProductFilter, "Фильтрация товаров")
-        Container(Recommendations, "Рекомендательные системы")
-        ContainerDb(Database_1, "База данных", "PostgreSQL", "Хранит информацию о товарах")
+    Container_Boundary(OrderManagement, "Оформление заказов") {
+        Container(CartService, "Сервис корзины", "Добавление, удаление товаров из корзины")
+        ContainerDb(CartDB, "БД корзины", "Хранит содержимое корзин пользователей")
+        Container(OrderService, "Сервис заказов", "Обработка заказов, возвраты")
+        ContainerDb(OrderDB, "БД заказов", "Хранит информацию о заказах")
+        Container(API_2, "API-шлюз", "Точка входа для клиентов")
     }
+    
+    Container_Boundary(PaymentService, "Оплата") {
+        Container(PaymentProcessor, "Сервис платежей", "Обрабатывает платежи")
+        ContainerDb(PaymentDB, "БД платежей", "Хранит транзакции и скидки")
+        Container(API_3, "API-шлюз", "Точка входа для клиентов")
+    }
+    
+    Container_Boundary(Warehouse, "Складская система") {
+        Container(WarehouseService, "Сервис управления собственными складами", "Учет остатков, интеграция с поставщиками")
+        ContainerDb(WarehouseDB, "БД склада", "Хранит информацию о товарах на складе")
+        Container(API_4, "API-шлюз", "Точка входа для клиентов")
+    }
+    
+    Container_Boundary(Delivery, "Доставка") {
+        Container(OwnDeliveryService, "Сервис собственной доставки", "Управление курьерами и маршрутами")
+        Container(PartnerDeliveryService, "Сервис партнерской доставки", "Интеграция с партнерами")
+        ContainerDb(DeliveryDB, "БД доставки", "Хранит данные о доставках")
+        Container(API_5, "API-шлюз", "Точка входа для клиентов")
+    }
+    
+    Container_Boundary(StoreManagement, "Управление магазинами") {
+        Container(StoreService, "Сервис управления магазинами", "Доступность товаров в офлайн-точках")
+        ContainerDb(StoreDB, "БД магазинов", "Хранит информацию о наличии товаров в гипермаркетах")
+        Container(API_6, "API-шлюз", "Точка входа для клиентов")
+    }
+    
+    Container_Boundary(CRM, "CRM и аналитика") {
+        Container(CRMService, "Сервис CRM", "Анализирует покупки и поведение клиентов")
+        ContainerDb(CRMDB, "БД CRM", "Хранит данные о клиентах и их покупках")
+        Container(API_7, "API-шлюз", "Точка входа для клиентов")
+    }
+    
+    Container_Boundary(Users, "Пользователи и доступ") {
+        Container(AuthService, "Сервис аутентификации", "Управление учетными записями, доступами")
+        Container(API_8, "API-шлюз", "Точка входа для клиентов")
 
-    Container_Boundary(OrderProcessing, "Система управления заказами") {
-        Container(OrderAPI, "API Заказов", "Управляет корзиной и заказами")
-        Container(CartManagement, "Управление корзиной")
-        Container(OrderProcessing_1, "Процессинг заказов")
-        Container(OrderHistory, "История покупок")
-        ContainerDb(Database_2, "База данных", "MySQL", "Хранит информацию о заказах")
-    }
+'Разбиени БД пользователей на шарды и реплики
+System_Boundary(Users, "Кластер БД пользователей") {
+    ContainerDb(UserDB, "БД пользователей", "Хранит учетные записи и роли")
+    Container_Boundary(ShardCluster, "Кластер шардирования") {
+        Container_Boundary(Shard1, "Шард 1 (User ID: 1-1000)") {
+            ContainerDb(Shard1_Master, "Шард 1 - Мастер", "Запись / Удаление") #lightblue
+            ContainerDb(Shard1_Replica1, "Шард 1 - Реплика 1", "Чтение") #lightgray
+            ContainerDb(Shard1_Replica2, "Шард 1 - Реплика 2", "Чтение") #lightgray
+        }
 
-    Container_Boundary(PaymentService, "Платежная система") {
-        Container(PaymentAPI, "API Платежей", "Обработка платежей и бонусов")
-        Container(DiscountAndBonus, "Обработка платежей")
-        Container(DiscountAndBonus_1, "Начисление бонусов и скидок")
-        ContainerDb(Database_4, "База данных", "PostgreSQL", "Хранит информацию о платежах")
-    }
+        Container_Boundary(Shard2, "Шард 2 (User ID: 1001-2000)") {
+            ContainerDb(Shard2_Master, "Шард 2 - Мастер", "Запись / Удаление") #lightblue
+            ContainerDb(Shard2_Replica1, "Шард 2 - Реплика 1", "Чтение") #lightgray
+            ContainerDb(Shard2_Replica2, "Шард 2 - Реплика 2", "Чтение") #lightgray
+        }
 
-    Container_Boundary(InventorySystem, "Складская система") {
-        Container(InventoryAPI, "API Склада", "Управление товарами на складе")
-        Container(OwnWarehouse, "Собственные склады")
-        Container(SupplierWarehouse, "Склады поставщиков")
-        Container(ProductReservation, "Резервирование товаров")
-        ContainerDb(Database_3, "База данных", "MongoDB", "Хранит остатки товаров")
-    }
-
-    Container_Boundary(DeliveryService, "Служба доставки") {
-        Container(DeliveryAPI, "API Доставки", "Управляет процессом доставки")
-        Container(OwnDelivery, "Собственная доставка")
-        Container(PartnerDelivery, "Партнерская доставка")
-        Container(Tracking, "Трекинг заказов")
-        ContainerDb(Database_5, "База данных", "Redis", "Хранит информацию о статусе доставки")
-    }
+        Container_Boundary(Shard3, "Шард 3 (User ID: 2001-3000)") {
+            ContainerDb(Shard3_Master, "Шард 3 - Мастер", "Запись / Удаление") #lightblue
+            ContainerDb(Shard3_Replica1, "Шард 3 - Реплика 1", "Чтение") #lightgray
+            ContainerDb(Shard3_Replica2, "Шард 3 - Реплика 2", "Чтение") #lightgray
+        }
+    }   
 }
 
+'Связи шародв и реплик
+Rel(UserDB, Shard1_Master, "Запись (по User ID)")
+Rel(UserDB, Shard2_Master, "Запись (по User ID)")
+Rel(UserDB, Shard3_Master, "Запись (по User ID)")
+
+Rel(Shard1_Master, Shard1_Replica1, "Репликация данных")
+Rel(Shard1_Master, Shard1_Replica2, "Репликация данных")
+Rel(Shard2_Master, Shard2_Replica1, "Репликация данных")
+Rel(Shard2_Master, Shard2_Replica2, "Репликация данных")
+Rel(Shard3_Master, Shard3_Replica1, "Репликация данных")
+Rel(Shard3_Master, Shard3_Replica2, "Репликация данных")
+  
+    }
+    
+    'Контейнеры кеширования
+    Container("ProductCache", "Кеш товаров", "Redis", "Кеширование информации о товарах") #pink
+    Container("OrderCache", "Кеш заказов", "Redis", "Кеширование состояния заказов и корзин") #pink
+    Container("UserCache", "Кеш пользователей", "Redis", "Кеширование профилей и ролей пользователей") #pink
+
+
+    Container(API, "API-шлюз", "Точка входа для клиентов")
+}
+
+'Внешняя система
 System_Boundary(s2, "Внешние системы") {
-    Container_Ext(ExternalPayment, "Платежные шлюзы", "Stripe, PayPal, СБП")
-    Container_Ext(SupplierSystem, "Системы поставщиков", "Получение информации о товарах и их остатках")
-    Container_Ext(ExternalLogistics, "Логистические операторы", "Доставка через партнеров")
+    Container_Ext(PaymentGateway, "Платежные шлюзы", "Взаимодействие с банками")
+    Container_Ext(SupplierSystem, "Системы поставщиков", "Обмен данными по товарам и остаткам")
+    Container_Ext(LogisticsPartners, "Логистические операторы", "Доставка через партнеров")
 }
 
-Rel(ClientAPI, ProductAPI, "Запрос данных о товарах")
-Rel(ClientAPI, OrderAPI, "Создание и просмотр заказов")
-Rel(ClientAPI, PaymentAPI, "Обработка платежей")
-Rel(ClientAPI, DeliveryAPI, "Отслеживание доставки")
+'Основные связи
+Rel(Customer, API, "Запросы в систему", "HTTPS")
+Rel(Employee, API, "Запросы в систему", "HTTPS")
+Rel(API, API_1, "Запрос информации о товарах", "REST")
+Rel(API_1, ProductService, "Запрос информации о товарах", "REST")
+Rel(API_2, CartService, "Добавление товаров в корзину", "REST")
+Rel(API_2, OrderService, "Информация о заказе", "REST")
+Rel(API, API_2, "Оформление заказа", "REST")
+Rel(CartService, OrderService, "Оформление заказа", "REST")
+Rel(API_3, PaymentProcessor, "Оплата заказа", "REST")
+Rel(API_4, WarehouseService, "Проверка наличия на складе", "REST")
+Rel(API, API_5, "Запрос статуса доставки", "REST")
+Rel(API_5, OwnDeliveryService, "Запрос статуса доставки", "REST")
+Rel(API, API_7, "Запрос информации о клиенте", "REST")
+Rel(API_7, CRMService, "Запрос информации о клиенте", "REST")
+Rel(PaymentProcessor, PaymentGateway, "Обработка платежей", "HTTPS")
+Rel(WarehouseService, SupplierSystem, "Получение информации о товарах", "HTTPS")
+Rel(PartnerDeliveryService, LogisticsPartners, "Интеграция с партнерами", "HTTPS")
 
-Rel(ProductAPI, ProductCategories, "Управление категориями")
-Rel(ProductAPI, ProductFilter, "Фильтрация товаров")
-Rel(ProductAPI, Recommendations, "Генерация рекомендаций")
-Rel(ProductAPI, Database_1, "Хранение данных о товарах")
+'Связи с API
+Rel(OrderService, API_4, "Резервирует товары", "REST")
+Rel(OrderService, API_3, "Запрашивает оплату", "REST")
+Rel(OrderService, API_5, "Задание на доставку", "REST")
+Rel(API_5, PartnerDeliveryService, "Отправляет заказ партнеру", "REST")
+Rel(CRMService, API_2, "Получает данные о заказах", "REST")
+Rel(API, API_8, "Запросы в систему", "HTTPS")
+Rel(API_8, AuthService, "Запрос информации о пользователях", "REST")
+Rel(API, API_6, "Запросы в систему", "HTTPS")
+Rel(API_6, StoreService, "Запрос информации о магазинах", "REST")
+Rel(StoreService, StoreDB, "Запрос информации о магазинах", "REST")
 
-Rel(OrderAPI, CartManagement, "Добавление в корзину")
-Rel(OrderAPI, OrderProcessing_1, "Оформление заказа")
-Rel(OrderAPI, OrderHistory, "Хранение истории покупок")
-Rel(OrderAPI, Database_2, "Хранение данных о заказах")
+'Связи с БД
+Rel(ProductService, ProductDB, "Читает/записывает")
+Rel(CartService, CartDB, "Читает/записывает")
+Rel(OrderService, OrderDB, "Читает/записывает")
+Rel(PaymentProcessor, PaymentDB, "Читает/записывает")
+Rel(WarehouseService, WarehouseDB, "Читает/записывает")
+Rel(OwnDeliveryService, DeliveryDB, "Читает/записывает")
+Rel(CRMService, CRMDB, "Читает/записывает")
+Rel(AuthService, UserDB, "Читает/записывает")
 
-Rel(PaymentAPI, DiscountAndBonus, "Обработка платежей")
-Rel(PaymentAPI, DiscountAndBonus_1, "Применение скидок")
-Rel(PaymentAPI, Database_4, "Хранение данных о платежах")
-Rel(PaymentAPI, ExternalPayment, "Интеграция с платежными шлюзами")
-
-Rel(InventoryAPI, OwnWarehouse, "Управление складом компании")
-Rel(InventoryAPI, SupplierWarehouse, "Интеграция с внешними складами")
-Rel(InventoryAPI, ProductReservation, "Резервирование товаров")
-Rel(InventoryAPI, Database_3, "Хранение данных о складе")
-Rel(InventoryAPI, SupplierSystem, "Получение информации от поставщиков")
-
-Rel(DeliveryAPI, OwnDelivery, "Управление собственной доставкой")
-Rel(DeliveryAPI, PartnerDelivery, "Интеграция с партнёрской логистикой")
-Rel(DeliveryAPI, Tracking, "Отслеживание статусов")
-Rel(DeliveryAPI, Database_5, "Хранение данных о доставке")
-Rel(DeliveryAPI, ExternalLogistics, "Интеграция с логистическими партнерами")
+'Связи с кешами
+Rel(ProductCache, ProductService, "Кеширование данных о товарах")
+Rel(OrderCache, OrderService, "Кеширование данных о заказах")
+Rel(UserCache, AuthService, "Кеширование данных о пользователях")
 
 @enduml

@@ -1,39 +1,48 @@
-
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 AddElementTag("internal", $borderColor="#061038", $fontColor="#ffffff")
-AddElementTag("external", $fontColor="#ffffff")
+AddElementTag("external", $borderColor="#808080", $fontColor="#ffffff")
 
-Person(Customer, "Клиент", "Покупает товары онлайн или в магазине")
-Person(Employee, "Сотрудник", "Работает в магазине или на складе")
+Person(Customer, "Покупатель", "Совершает покупки в интернет-магазине или оффлайн")
+Person(Employee, "Сотрудник магазина", "Работает с заказами, складами, клиентами")
+
 
 System_Boundary(s1, "Система компании") {
-    System(OnlineStore, "Интернет-магазин", "Витрина, каталог товаров")
-    System(OrderProcessing, "Система управления заказами", "Обрабатывает заказы, возвраты")
-    System(PaymentService, "Платежная система", "Обрабатывает платежи, скидки, бонусы")
-    System(InventorySystem, "Складская система", "Управление запасами")
-    System(DeliveryService, "Служба доставки", "Организует доставку")
-    System(CRM, "CRM-система", "Управление клиентами, аналитика")
+    System(OnlineStore, "Каталог товаров", "Управление ассортиментом, фильтрация, поиск")
+    System(OrderManagement, "Оформление заказов", "Корзина, процессинг, история заказов")
+    System(PaymentService, "Оплата", "Обработка платежей, скидки, бонусы")
+    System(Warehouse, "Складская система", "Учет остатков, интеграция с поставщиками")
+    System(Delivery, "Доставка", "Собственная и партнерская логистика")
+    System(StoreManagement, "Управление магазинами", "Наличие товаров, локальные акции")
+    System(CRM, "CRM и аналитика", "Учет клиентов, маркетинг, аналитика")
+    System(Users, "Пользователи и доступ", "Авторизация, роли, безопасность")
 }
 
 System_Boundary(s2, "Внешние системы") {
-    System_Ext(ExternalPayment, "Платежные шлюзы", "Stripe, PayPal, СБП")
-    System_Ext(SupplierSystem, "Системы поставщиков", "Обновляют наличие товаров")
-    System_Ext(ExternalLogistics, "Логистические партнеры", "Доставка через партнеров")
-    System_Ext(MarketingTools, "Маркетинг и аналитика", "Google Analytics, Mailchimp")
+    System_Ext(PaymentGateway, "Платежные шлюзы", "Взаимодействие с банками")
+    System_Ext(SupplierSystem, "Системы поставщиков", "Обмен данными по товарам и остаткам")
+    System_Ext(LogisticsPartners, "Логистические операторы", "Доставка через партнеров")
 }
 
-Rel(Customer, OnlineStore, "Оформляет заказы")
-Rel(Customer, DeliveryService, "Получает доставку")
-Rel(Employee, InventorySystem, "Следит за наличием товаров")
-Rel(Employee, CRM, "Анализирует данные клиентов")
-Rel(OnlineStore, OrderProcessing, "Передает заказы")
+Rel(Customer, OnlineStore, "Просматривает и выбирает товары")
+Rel(Customer, OrderManagement, "Оформляет заказ, управляет корзиной")
+Rel(Customer, PaymentService, "Оплачивает заказ")
+Rel(Customer, Delivery, "Отслеживает статус доставки")
 
+Rel(Employee, StoreManagement, "Управляет наличием товаров в магазине")
+Rel(Employee, Warehouse, "Следит за остатками товаров")
+Rel(Employee, OrderManagement, "Сбор заказа для покупателя")
+Rel(Employee, Users, "Настраивает пользователей и доступы")
+Rel(Employee, CRM, "Анализирует отчёты")
 
-Rel(PaymentService, ExternalPayment, "Интеграция с платежными системами")
-Rel(InventorySystem, SupplierSystem, "Получает данные о товарах")
-Rel(DeliveryService, ExternalLogistics, "Отправляет заказы")
-Rel(CRM, MarketingTools, "Передает данные о клиентах")
+Rel(OnlineStore, OrderManagement, "Передает информацию о заказанных товарах")
+Rel(OrderManagement, PaymentService, "Запрашивает оплату")
+Rel(OrderManagement, Warehouse, "Резервирует товар")
+Rel(OrderManagement, Delivery, "Создает задание на доставку")
+
+Rel(PaymentService, PaymentGateway, "Обрабатывает платежи")
+Rel(Warehouse, SupplierSystem, "Запрашивает данные о товарах")
+Rel(Delivery, LogisticsPartners, "Передает заказы на партнерскую доставку")
 
 @enduml
