@@ -1,0 +1,117 @@
+@startuml
+!define Table(name) class name << (T,#FFAAAA) >>
+!define PK <<PK>>
+!define FK <<FK>>
+
+Table(Товар) {
+  +product_id: int PK
+  +name: string
+  +description: string
+  +price: decimal
+  +quantity: int
+  +category_id: int FK
+}
+
+Table(Категория) {
+  +category_id: int PK
+  +name: string
+  +description: string
+}
+
+Table(Корзина) {
+  +basket_id: int PK
+  +user_id: int FK
+  +status: string
+  +total_price: decimal
+  +created_at: datetime
+  +updated_at: datetime
+}
+
+Table(Заказ) {
+  +order_id: int PK
+  +user_id: int FK
+  +order_date: datetime
+  +status: string
+  +total_price: decimal
+  +shipping_address: string
+  +payment_method: string
+  +delivery_id: int FK 
+}
+
+Table(Транзакция) {
+  +transaction_id: int PK
+  +order_id: int FK
+  +transaction_date: datetime
+  +amount: decimal
+  +status: string
+  +transaction_type: string
+}
+
+Table(Платеж) {
+  +payment_id: int PK
+  +order_id: int FK
+  +payment_date: datetime
+  +amount: decimal
+  +status: string
+  +payment_method: string
+}
+
+Table(Склад) {
+  +warehouse_id: int <<PK>>
+  +name: string
+  +location: string
+}
+
+Table(Остатки_на_складе) {
+  +stock_id: int PK
+  +warehouse_id: int FK
+  +product_id: int FK
+  +quantity: int
+}
+
+Table(Пользователь) {
+  +user_id: int PK
+  +name: string
+  +email: string
+  +phone: string
+  +registration_date: datetime
+  +last_login: datetime
+  +role: string  
+  +permissions: string 
+}
+
+Table(Доставка) {
+  +delivery_id: int PK
+  +order_id: int FK
+  +delivery_date: datetime
+  +delivery_status: string 
+  +delivery_method: string 
+}
+
+Table(Собственная_доставка) {
+  +delivery_id_own: int PK
+  +delivery_address_own: string
+  +tracking_number_own: string
+  +provider_name_own: string 
+}
+
+Table(Доставка_через_поставщика) {
+  +delivery_id_partner: int PK
+  +provider_name_partner: string 
+  +tracking_number_partner: string 
+  +delivery_address_partner: string
+}
+
+"Категория" ||--o{ "Товар"
+"Пользователь" ||--o{ "Корзина"
+"Корзина" ||--o{ "Товар"
+"Пользователь" ||--o{ "Заказ"
+"Заказ" ||--o{ "Товар"
+"Заказ" ||--o{ "Транзакция"
+"Платеж" ||--o{ "Заказ"
+"Склад" ||--o{ "Остатки_на_складе"
+"Остатки_на_складе" }o--|| "Товар"
+"Заказ" ||--o{ "Доставка"
+"Доставка" ||--o{ "Собственная_доставка"
+"Доставка" ||--o{ "Доставка_через_поставщика"
+@enduml
