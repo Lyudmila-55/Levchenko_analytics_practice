@@ -102,7 +102,6 @@ Rel(Shard3_Master, Shard3_Replica2, "Репликация данных")
     Container("OrderCache", "Кеш заказов", "Redis", "Кеширование состояния заказов и корзин") #pink
     Container("UserCache", "Кеш пользователей", "Redis", "Кеширование профилей и ролей пользователей") #pink
 
-
     Container(API, "API-шлюз", "Точка входа для клиентов")
 }
 
