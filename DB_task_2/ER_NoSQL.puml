@@ -5,7 +5,7 @@ entity "Товары" as Products <<Коллекция>> {
     + description : TEXT
     + price : DECIMAL(10,2)
     + quantity : INT
-    + category : Object  ' Вложенный объект Категория
+    + category : Object  
 }
 
 entity "Категории" as Categories <<Вложенный объект>> {
@@ -22,7 +22,7 @@ entity "Корзины" as Baskets <<Коллекция>> {
     + created_at : DATETIME
     + updated_at : DATETIME
     --
-    + products : Array<Object>  ' Массив товаров в корзине
+    + products : Array<Object> 
 }
 
 entity "Заказы" as Orders <<Коллекция>> {
@@ -34,8 +34,8 @@ entity "Заказы" as Orders <<Коллекция>> {
     + shipping_address : STRING
     + payment_method : STRING
     --
-    + products : Array<Object>  ' Массив товаров из корзины
-    + delivery : Object  ' Вложенный объект доставки
+    + products : Array<Object>  
+    + delivery : Object  
 }
 
 entity "Транзакции" as Transactions <<Вложенный объект>> {
@@ -68,7 +68,6 @@ entity "Пользователи" as Users <<Коллекция>> {
     + email : STRING
     + phone : STRING
     + registration_date : DATETIME
-    + last_login : DATETIME
     + role : STRING  
     + permissions : STRING 
 }
