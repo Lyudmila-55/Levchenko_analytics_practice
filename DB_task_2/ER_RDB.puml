@@ -84,27 +84,20 @@ Table(Доставка) {
   +delivery_id: int PK
   +order_id: int FK
   +delivery_date: datetime
-  +delivery_status: string 
-  +delivery_method: string 
+  +delivery_status: string
+  +delivery_method: string
+  +delivery_type: string  
+  +provider_name: string  
 }
 
-Table(Собственная_доставка) {
-  +delivery_id_own: int PK
-  +delivery_address_own: string
-  +tracking_number_own: string
-  +provider_name_own: string 
-}
-
-Table(Доставка_через_поставщика) {
-  +delivery_id_partner: int PK
-  +provider_name_partner: string 
-  +tracking_number_partner: string 
-  +delivery_address_partner: string
+Table(Корзина_Товары) {
+  +basket_id: int FK
+  +product_id: int FK
+  +quantity: int
 }
 
 "Категория" ||--o{ "Товар"
 "Пользователь" ||--o{ "Корзина"
-"Корзина" ||--o{ "Товар"
 "Пользователь" ||--o{ "Заказ"
 "Заказ" ||--o{ "Товар"
 "Заказ" ||--o{ "Транзакция"
@@ -112,6 +105,7 @@ Table(Доставка_через_поставщика) {
 "Склад" ||--o{ "Остатки_на_складе"
 "Остатки_на_складе" }o--|| "Товар"
 "Заказ" ||--o{ "Доставка"
-"Доставка" ||--o{ "Собственная_доставка"
-"Доставка" ||--o{ "Доставка_через_поставщика"
+"Корзина" ||--o{ "Корзина_Товары"
+"Товар" ||--o{ "Корзина_Товары"
+
 @enduml
