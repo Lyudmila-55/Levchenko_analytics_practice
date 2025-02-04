@@ -1,11 +1,23 @@
 @startuml
+entity "Пользователь" as Users <<Коллекция>> {
+  + user_id: int PK
+  + name: string
+  + email: string
+  + phone: string
+  + registration_date: datetime
+  + last_login: datetime
+  + role: string  
+  + permissions: string 
+}
+
 entity "Товары" as Products <<Коллекция>> {
     + product_id : UUID [PK]
     + name : VARCHAR(225)
     + description : TEXT
     + price : DECIMAL(10,2)
     + quantity : INT
-    + category : Object  
+    --
+    + category : Object <<Вложенный объект>> 
 }
 
 entity "Категории" as Categories <<Вложенный объект>> {
@@ -22,7 +34,7 @@ entity "Корзины" as Baskets <<Коллекция>> {
     + created_at : DATETIME
     + updated_at : DATETIME
     --
-    + products : Array<Object> 
+    + products : Array<Object> <<Вложенные объекты: { product_id, quantity }>
 }
 
 entity "Заказы" as Orders <<Коллекция>> {
@@ -34,17 +46,8 @@ entity "Заказы" as Orders <<Коллекция>> {
     + shipping_address : STRING
     + payment_method : STRING
     --
-    + products : Array<Object>  
-    + delivery : Object  
-}
-
-entity "Транзакции" as Transactions <<Вложенный объект>> {
-    + transaction_id : UUID [PK]
-    + order_id : UUID
-    + transaction_date : DATETIME
-    + amount : DECIMAL(10,2)
-    + status : STRING
-    + transaction_type : STRING
+    + basket : Object <<Вложенные объекты>>
+    + warehouse : Object <<Вложенный объект>>
 }
 
 entity "Платежи" as Payments <<Коллекция>> {
@@ -54,6 +57,25 @@ entity "Платежи" as Payments <<Коллекция>> {
     + amount : DECIMAL(10,2)
     + status : STRING
     + payment_method : STRING
+    --
+    + transaction : Object <<Вложенный объект>>
+}
+
+entity "Транзакции" as Transactions <<Вложенный объект>> {
+    + transaction_id : UUID [PK]
+    + transaction_date : DATETIME
+    + amount : DECIMAL(10,2)
+    + status : STRING
+    + transaction_type : STRING
+}
+
+entity "Доставка" as Delivery <<Коллекция>> {
+    + delivery_id : UUID [PK]
+    + order_id : UUID
+    + delivery_date : DATETIME
+    + delivery_status : STRING
+    + delivery_method : STRING
+    + provider_name : STRING
 }
 
 entity "Склад" as Warehouse <<Коллекция>> {
@@ -62,47 +84,9 @@ entity "Склад" as Warehouse <<Коллекция>> {
     + location : STRING
 }
 
-entity "Пользователи" as Users <<Коллекция>> {
-    + user_id : UUID [PK]
-    + name : STRING
-    + email : STRING
-    + phone : STRING
-    + registration_date : DATETIME
-    + role : STRING  
-    + permissions : STRING 
-}
-
-entity "Доставка" as Delivery <<Вложенный объект>> {
-    + delivery_id : UUID [PK]
-    + order_id : UUID
-    + delivery_date : DATETIME
-    + delivery_status : STRING 
-    + delivery_method : STRING
-}
-
-entity "Собственная доставка" as OwnDelivery <<Вложенный объект>> {
-    + delivery_id_own : UUID [PK]
-    + delivery_address_own : STRING
-    + tracking_number_own : STRING
-    + provider_name_own : STRING 
-}
-
-entity "Доставка через поставщика" as PartnerDelivery <<Вложенный объект>> {
-    + delivery_id_partner : UUID [PK]
-    + provider_name_partner : STRING 
-    + tracking_number_partner : STRING 
-    + delivery_address_partner : STRING
-}
-
-Users *-- Products : выбирает
-Products *-- Categories : принадлежит
-Baskets *-- Products : находится
-Orders *-- Baskets : создает
-Orders *-- Warehouse : проверяется
-Orders *-- Payments : оплачивается
-Payments *-- Transactions : подтверждается
-Orders *-- Delivery : доставляется
-Delivery *-- OwnDelivery : собственная
-Delivery *-- PartnerDelivery : через посредника
+Products *-- Categories 
+Payments *-- Transactions  
+Orders *-- Warehouse 
+Orders *-- Baskets 
 
 @enduml

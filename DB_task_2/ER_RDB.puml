@@ -34,8 +34,6 @@ Table(Заказ) {
   +status: string
   +total_price: decimal
   +shipping_address: string
-  +payment_method: string
-  +delivery_id: int FK 
 }
 
 Table(Транзакция) {
@@ -54,6 +52,7 @@ Table(Платеж) {
   +amount: decimal
   +status: string
   +payment_method: string
+
 }
 
 Table(Склад) {
@@ -85,8 +84,7 @@ Table(Доставка) {
   +order_id: int FK
   +delivery_date: datetime
   +delivery_status: string
-  +delivery_method: string
-  +delivery_type: string  
+  +delivery_method: string 
   +provider_name: string  
 }
 
@@ -96,16 +94,22 @@ Table(Корзина_Товары) {
   +quantity: int
 }
 
+Table(Товары_Заказы) {
+  +order_id: int FK
+  +product_id: int FK
+  +quantity: int
+}
+
 "Категория" ||--o{ "Товар"
-"Пользователь" ||--o{ "Корзина"
+"Пользователь" ||--|| "Корзина"
 "Пользователь" ||--o{ "Заказ"
-"Заказ" ||--o{ "Товар"
-"Заказ" ||--o{ "Транзакция"
-"Платеж" ||--o{ "Заказ"
+"Платеж" ||--|| "Транзакция"
+"Платеж" ||--|| "Заказ"
 "Склад" ||--o{ "Остатки_на_складе"
 "Остатки_на_складе" }o--|| "Товар"
 "Заказ" ||--o{ "Доставка"
 "Корзина" ||--o{ "Корзина_Товары"
 "Товар" ||--o{ "Корзина_Товары"
-
+"Заказ" ||--o{ "Товары_Заказы"
+"Товар" ||--o{ "Товары_Заказы"
 @enduml
