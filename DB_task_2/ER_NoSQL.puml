@@ -87,6 +87,6 @@ entity "Склад" as Warehouse <<Коллекция>> {
 Products *-- Categories 
 Payments *-- Transactions  
 Orders *-- Warehouse 
-Orders *-- Baskets 
+Users *-- Baskets 
 
 @enduml
