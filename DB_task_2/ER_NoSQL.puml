@@ -1,120 +1,109 @@
 @startuml
-!define Document(name) class name << (D,#FFAAAA) >>
-!define Ref <<Ref>> 
-
-Document(Товар) {
-  +product_id: int
-  +name: string
-  +description: string
-  +price: decimal
-  +quantity: int
-  +category: CategoryRef
+entity "Товары" as Products <<Коллекция>> {
+    + product_id : UUID [PK]
+    + name : VARCHAR(225)
+    + description : TEXT
+    + price : DECIMAL(10,2)
+    + quantity : INT
+    + category : Object  ' Вложенный объект Категория
 }
 
-Document(Категория) {
-  +category_id: int
-  +name: string
-  +description: string
+entity "Категории" as Categories <<Вложенный объект>> {
+    + category_id : UUID [PK]
+    + name : VARCHAR(100)
+    + description : TEXT
 }
 
-Document(Корзина) {
-  +basket_id: int
-  +user_id: int
-  +status: string
-  +total_price: decimal
-  +created_at: datetime
-  +updated_at: datetime
-  +items: List<ProductRef> 
+entity "Корзины" as Baskets <<Коллекция>> {
+    + basket_id : UUID [PK]
+    + user_id : UUID
+    + status : STRING
+    + total_price : DECIMAL(10,2)
+    + created_at : DATETIME
+    + updated_at : DATETIME
+    --
+    + products : Array<Object>  ' Массив товаров в корзине
 }
 
-Document(Заказ) {
-  +order_id: int
-  +user_id: int
-  +order_date: datetime
-  +status: string
-  +total_price: decimal
-  +shipping_address: string
-  +payment_method: string
-  +delivery: DeliveryRef  
-  +items: List<ProductRef> 
+entity "Заказы" as Orders <<Коллекция>> {
+    + order_id : UUID [PK]
+    + user_id : UUID
+    + order_date : DATETIME
+    + status : STRING
+    + total_price : DECIMAL(10,2)
+    + shipping_address : STRING
+    + payment_method : STRING
+    --
+    + products : Array<Object>  ' Массив товаров из корзины
+    + delivery : Object  ' Вложенный объект доставки
 }
 
-Document(Транзакция) {
-  +transaction_id: int
-  +order_id: int
-  +transaction_date: datetime
-  +amount: decimal
-  +status: string
-  +transaction_type: string
+entity "Транзакции" as Transactions <<Вложенный объект>> {
+    + transaction_id : UUID [PK]
+    + order_id : UUID
+    + transaction_date : DATETIME
+    + amount : DECIMAL(10,2)
+    + status : STRING
+    + transaction_type : STRING
 }
 
-Document(Платеж) {
-  +payment_id: int
-  +order_id: int
-  +payment_date: datetime
-  +amount: decimal
-  +status: string
-  +payment_method: string
+entity "Платежи" as Payments <<Коллекция>> {
+    + payment_id : UUID [PK]
+    + order_id : UUID
+    + payment_date : DATETIME
+    + amount : DECIMAL(10,2)
+    + status : STRING
+    + payment_method : STRING
 }
 
-Document(Склад) {
-  +warehouse_id: int
-  +name: string
-  +location: string
+entity "Склад" as Warehouse <<Коллекция>> {
+    + warehouse_id : UUID [PK]
+    + name : STRING
+    + location : STRING
 }
 
-Document(Остатки_на_складе) {
-  +stock_id: int
-  +warehouse_id: int
-  +product_id: int
-  +quantity: int
+entity "Пользователи" as Users <<Коллекция>> {
+    + user_id : UUID [PK]
+    + name : STRING
+    + email : STRING
+    + phone : STRING
+    + registration_date : DATETIME
+    + last_login : DATETIME
+    + role : STRING  
+    + permissions : STRING 
 }
 
-Document(Пользователь) {
-  +user_id: int
-  +name: string
-  +email: string
-  +phone: string
-  +registration_date: datetime
-  +last_login: datetime
-  +role: string  
-  +permissions: string
-  +baskets: List<BasketRef>
-  +orders: List<OrderRef> 
+entity "Доставка" as Delivery <<Вложенный объект>> {
+    + delivery_id : UUID [PK]
+    + order_id : UUID
+    + delivery_date : DATETIME
+    + delivery_status : STRING 
+    + delivery_method : STRING
 }
 
-Document(Доставка) {
-  +delivery_id: int
-  +order_id: int
-  +delivery_date: datetime
-  +delivery_status: string 
-  +delivery_method: string
+entity "Собственная доставка" as OwnDelivery <<Вложенный объект>> {
+    + delivery_id_own : UUID [PK]
+    + delivery_address_own : STRING
+    + tracking_number_own : STRING
+    + provider_name_own : STRING 
 }
 
-Document(Собственная_доставка) {
-  +delivery_id_own: int
-  +delivery_address_own: string
-  +tracking_number_own: string
-  +provider_name_own: string
+entity "Доставка через поставщика" as PartnerDelivery <<Вложенный объект>> {
+    + delivery_id_partner : UUID [PK]
+    + provider_name_partner : STRING 
+    + tracking_number_partner : STRING 
+    + delivery_address_partner : STRING
 }
 
-Document(Доставка_через_поставщика) {
-  +delivery_id_partner: int
-  +provider_name_partner: string
-  +tracking_number_partner: string
-  +delivery_address_partner: string
-}
-
-Категория ||--o{ Товар
-Корзина ||--o{ Товар
-Пользователь ||--o{ Корзина
-Пользователь ||--o{ Заказ
-Заказ ||--o{ Транзакция
-Платеж ||--o{ Заказ
-Склад ||--o{ Остатки_на_складе
-Остатки_на_складе }o--|| Товар
-Заказ ||--o{ Доставка
-Доставка ||--o{ Собственная_доставка
-Доставка ||--o{ Доставка_через_поставщика
+Users *-- Products : выбирает
+Products *-- Categories : принадлежит
+Baskets *-- Products : находится
+Orders *-- Baskets : создает
+Orders *-- Warehouse : проверяется
+Orders *-- Payments : оплачивается
+Payments *-- Transactions : подтверждается
+Orders *-- Delivery : доставляется
+Delivery *-- OwnDelivery : собственная
+Delivery *-- PartnerDelivery : через посредника
 
 @enduml
