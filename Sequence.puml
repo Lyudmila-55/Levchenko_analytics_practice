@@ -1,0 +1,61 @@
+@startuml
+
+actor "Пользователь" as User
+participant "Веб-приложение" as WebApp
+participant "Заказы" as Orders
+participant "Kafka" as Kafka
+participant "Склад" as Warehouse
+participant "Платежи" as Payments
+participant "Доставка" as Delivery
+
+User -> WebApp: Оформляет заказ
+WebApp -> Orders: Создает заказ
+Orders -> Kafka: Публикует событие о заказе
+Warehouse --> Kafka: Запрашивает данные о заказе
+Kafka -> Warehouse: Вычитывает даннеы о заказе
+Warehouse -> Warehouse: Проверяет наличие товара
+
+alt #LightGreen Товар в наличии
+Warehouse -> Orders: Подтверждает резерв
+Orders -> Kafka: Публикует событие о резервировании заказа
+Orders --> WebApp: Информирует, что заказ создан
+WebApp --> User: Отображает сообщение "Ваш заказ создан, выберите способ оплаты"
+User -> WebApp: Выбирает способ оплаты и инициирует платеж
+WebApp -> Payments: Отправляет задание на создание платежа
+Payments -> Kafka: Публикует событие о начале платежа
+Kafka -> Payments: Обрабатывает запрос на оплату
+
+    alt #LightGreen Платеж успешен
+    Payments -> Kafka: Публикует событие о завершении платежа
+    Orders -> Kafka: Вычитывает данные из топика
+    Kafka --> Orders: Обновляет статус заказа на "оплачен"
+    Orders --> WebApp: Уведомление о статусе заказа "оплачено"
+    WebApp --> User: : Уведомление о статусе заказа "оплачено"
+    
+    Orders -> Delivery: Запрос на оформление доставки
+    Delivery -> Kafka: Публикует событие о доставке
+    Orders -> Kafka: Вычитывает данные из топика
+    Kafka --> Orders: Информирует о доставке
+    Orders --> WebApp: Информирует о доставке
+    WebApp --> User: Информирует о доставке
+
+    User -> WebApp: Запрашивает статус заказа
+    WebApp -> Orders: Запрашивает текущий статус
+    Orders --> WebApp: Передает текущий статус
+    WebApp --> User: Отображает статус
+
+    else #LightPink Платеж не прошел
+    Payments -> Kafka: Публикует событие об ошибке платежа
+    Kafka --> Orders: Отменяет заказ
+    Orders --> WebApp: Информирует пользователя об ошибке оплаты
+    WebApp --> User: Показывает сообщение об ошибке
+    end
+
+else #LightPink Товара нет в наличии
+Warehouse -> Orders: Отменяет заказ
+Orders -> Kafka: Публикует событие об отмене заказа
+Orders --> WebApp: Информирует пользователя об отсутствии товара
+WebApp --> User: Сообщает об отсутствии товара
+end
+
+@enduml
