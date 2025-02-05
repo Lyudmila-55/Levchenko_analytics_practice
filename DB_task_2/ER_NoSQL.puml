@@ -1,0 +1,92 @@
+@startuml
+entity "Пользователь" as Users <<Коллекция>> {
+  + user_id: int PK
+  + name: string
+  + email: string
+  + phone: string
+  + registration_date: datetime
+  + last_login: datetime
+  + role: string  
+  + permissions: string 
+}
+
+entity "Товары" as Products <<Коллекция>> {
+    + product_id : UUID [PK]
+    + name : VARCHAR(225)
+    + description : TEXT
+    + price : DECIMAL(10,2)
+    + quantity : INT
+    --
+    + category : Object <<Вложенный объект>> 
+}
+
+entity "Категории" as Categories <<Вложенный объект>> {
+    + category_id : UUID [PK]
+    + name : VARCHAR(100)
+    + description : TEXT
+}
+
+entity "Корзины" as Baskets <<Коллекция>> {
+    + basket_id : UUID [PK]
+    + user_id : UUID
+    + status : STRING
+    + total_price : DECIMAL(10,2)
+    + created_at : DATETIME
+    + updated_at : DATETIME
+    --
+    + products : Array<Object> <<Вложенные объекты: { product_id, quantity }>
+}
+
+entity "Заказы" as Orders <<Коллекция>> {
+    + order_id : UUID [PK]
+    + user_id : UUID
+    + order_date : DATETIME
+    + status : STRING
+    + total_price : DECIMAL(10,2)
+    + shipping_address : STRING
+    + payment_method : STRING
+    --
+    + basket : Object <<Вложенные объекты>>
+    + warehouse : Object <<Вложенный объект>>
+}
+
+entity "Платежи" as Payments <<Коллекция>> {
+    + payment_id : UUID [PK]
+    + order_id : UUID
+    + payment_date : DATETIME
+    + amount : DECIMAL(10,2)
+    + status : STRING
+    + payment_method : STRING
+    --
+    + transaction : Object <<Вложенный объект>>
+}
+
+entity "Транзакции" as Transactions <<Вложенный объект>> {
+    + transaction_id : UUID [PK]
+    + transaction_date : DATETIME
+    + amount : DECIMAL(10,2)
+    + status : STRING
+    + transaction_type : STRING
+}
+
+entity "Доставка" as Delivery <<Коллекция>> {
+    + delivery_id : UUID [PK]
+    + order_id : UUID
+    + delivery_date : DATETIME
+    + delivery_status : STRING
+    + delivery_method : STRING
+    + provider_name : STRING
+}
+
+entity "Склад" as Warehouse <<Коллекция>> {
+    + warehouse_id : UUID [PK]
+    + name : STRING
+    + location : STRING
+}
+
+Products *-- Categories 
+Payments *-- Transactions  
+Orders *-- Warehouse 
+Users *-- Baskets 
+
+@enduml

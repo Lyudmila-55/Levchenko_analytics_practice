@@ -1,0 +1,115 @@
+@startuml
+!define Table(name) class name << (T,#FFAAAA) >>
+!define PK <<PK>>
+!define FK <<FK>>
+
+Table(Товар) {
+  +product_id: int PK
+  +name: string
+  +description: string
+  +price: decimal
+  +quantity: int
+  +category_id: int FK
+}
+
+Table(Категория) {
+  +category_id: int PK
+  +name: string
+  +description: string
+}
+
+Table(Корзина) {
+  +basket_id: int PK
+  +user_id: int FK
+  +status: string
+  +total_price: decimal
+  +created_at: datetime
+  +updated_at: datetime
+}
+
+Table(Заказ) {
+  +order_id: int PK
+  +user_id: int FK
+  +order_date: datetime
+  +status: string
+  +total_price: decimal
+  +shipping_address: string
+}
+
+Table(Транзакция) {
+  +transaction_id: int PK
+  +order_id: int FK
+  +transaction_date: datetime
+  +amount: decimal
+  +status: string
+  +transaction_type: string
+}
+
+Table(Платеж) {
+  +payment_id: int PK
+  +order_id: int FK
+  +payment_date: datetime
+  +amount: decimal
+  +status: string
+  +payment_method: string
+
+}
+
+Table(Склад) {
+  +warehouse_id: int <<PK>>
+  +name: string
+  +location: string
+}
+
+Table(Остатки_на_складе) {
+  +stock_id: int PK
+  +warehouse_id: int FK
+  +product_id: int FK
+  +quantity: int
+}
+
+Table(Пользователь) {
+  +user_id: int PK
+  +name: string
+  +email: string
+  +phone: string
+  +registration_date: datetime
+  +last_login: datetime
+  +role: string  
+  +permissions: string 
+}
+
+Table(Доставка) {
+  +delivery_id: int PK
+  +order_id: int FK
+  +delivery_date: datetime
+  +delivery_status: string
+  +delivery_method: string 
+  +provider_name: string  
+}
+
+Table(Корзина_Товары) {
+  +basket_id: int FK
+  +product_id: int FK
+  +quantity: int
+}
+
+Table(Товары_Заказы) {
+  +order_id: int FK
+  +product_id: int FK
+  +quantity: int
+}
+
+"Категория" ||--o{ "Товар"
+"Пользователь" ||--|| "Корзина"
+"Пользователь" ||--o{ "Заказ"
+"Платеж" ||--|| "Транзакция"
+"Платеж" ||--|| "Заказ"
+"Склад" ||--o{ "Остатки_на_складе"
+"Остатки_на_складе" }o--|| "Товар"
+"Заказ" ||--o{ "Доставка"
+"Корзина" ||--o{ "Корзина_Товары"
+"Товар" ||--o{ "Корзина_Товары"
+"Заказ" ||--o{ "Товары_Заказы"
+"Товар" ||--o{ "Товары_Заказы"
+@enduml
