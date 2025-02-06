@@ -1,0 +1,243 @@
+openapi: 3.0.0
+info:
+  title: E-Commerce API
+  version: 1.0.0
+  description: API для управления товарами, заказами и пользователями
+servers:
+  - url: https://api.example.com/v1
+
+tags:
+  - name: products
+    description: Информация о товарах
+  - name: users
+    description: Информация о пользователях
+
+paths:
+  /products:
+    get:
+      tags:
+      - products
+      summary: Получить список товаров
+      parameters:
+        - name: category
+          in: query
+          description: Фильтрация по категории
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список товаров
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      tags:
+      - products
+      summary: Добавить новый товар
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Товар создан
+
+  /products/{product_id}:
+    get:
+      tags:
+      - products
+      summary: Получить информацию о товаре
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Данные о товаре
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    put:
+      tags:
+      - products
+      summary: Обновить информацию о товаре
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Товар обновлен
+    delete:
+      tags:
+      - products
+      summary: Удалить товар
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Товар удален
+
+  /users:
+    get:
+      tags:
+      - users
+      summary: Получить список пользователей
+      responses:
+        '200':
+          description: Список пользователей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    post:
+      tags:
+      - users
+      summary: Создать нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Пользователь создан
+
+  /users/{user_id}:
+    get:
+      tags:
+      - users
+      summary: Получить информацию о пользователе
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Данные о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      tags:
+      - users
+      summary: Обновить информацию о пользователе
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Пользователь обновлен
+    delete:
+      tags:
+      - users
+      summary: Удалить пользователя
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Пользователь удален
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        product_id:
+          type: string
+          example: "uuid-1234"
+        name:
+          type: string
+          example: "Краска фасадная"
+        description:
+          type: string
+          example: "Белая акриловая краска для наружных работ"
+        price:
+          type: number
+          format: decimal
+          example: 100.5
+        quantity:
+          type: integer
+          example: 20
+        category:
+          type: object
+          properties:
+            category_id:
+              type: string
+              example: "uuid-5678"
+            name:
+              type: string
+              example: "Краски и лаки"
+            description:
+              type: string
+              example: "Краски для внутренних и наружных работ"
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "UUID-1234"
+        user_id:
+          type: string
+          example: "UUID-5678"
+        name:
+          type: string
+          example: "Иван Иванов"
+        email:
+          type: string
+          example: "ivan@example.com"
+        phone:
+          type: string
+          example: "+7-900-123-45-67"
+        registration_date:
+          type: string
+          format: date-time
+          example: "2025-02-04T12:00:00Z"
+        role:
+          type: string
+          example: "user"
+        permissions:
+          type: string
+          example: "read" 
