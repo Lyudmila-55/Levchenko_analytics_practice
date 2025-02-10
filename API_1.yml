@@ -24,6 +24,16 @@ paths:
           description: Фильтрация по категории
           schema:
             type: string
+        - name: min_price
+          in: query
+          description: Минимальная цена
+          schema:
+            type: number
+        - name: max_price
+          in: query
+          description: Максимальная цена
+          schema:
+            type: number
       responses:
         '200':
           description: Список товаров
@@ -33,6 +43,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+        '400':
+           description: Неверные параметры запроса
+           content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid query parameters"
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
     post:
       tags:
       - products
@@ -46,6 +76,26 @@ paths:
       responses:
         '201':
           description: Товар создан
+        '400':
+          description: Неверные данные в запросе
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request data"
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
 
   /products/{product_id}:
     get:
@@ -65,6 +115,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        '400':
+           description: Неверные параметры запроса
+           content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid query parameters"
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
     put:
       tags:
       - products
@@ -112,7 +182,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-
+        '400':
+           description: Неверные параметры запроса
+           content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid query parameters"
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
     post:
       tags:
       - users
