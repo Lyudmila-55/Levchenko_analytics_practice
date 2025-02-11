@@ -1,0 +1,205 @@
+== Топики Kafka для микросервисов строительного магазина
+
+=== Каталог товаров
+* `catalog.request` – Запрос на создание, обновление или удаление товаров, категорий и характеристик.
+* `catalog.response` – Ответ на запрос (успех, ошибка, подтверждение).
+
+===JSON
+{
+  "type": "catalog",
+  "action": "create|update|delete",
+  "data": {
+    "product": {
+      "product_id": "uuid-1234",
+      "name": "Краска фасадная",
+      "description": "Белая акриловая краска для наружных работ",
+      "price": 100.5,
+      "quantity": 20,
+      "category": {
+        "category_id": "uuid-5678",
+        "name": "Краски и лаки",
+        "description": "Краски для внутренних и наружных работ"
+      }
+    }
+  }
+}
+
+===Avro
+{
+  "type": "record",
+  "name": "CatalogRequest",
+  "fields": [
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "action",
+      "type": "string"
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "ProductData",
+        "fields": [
+          {
+            "name": "product",
+            "type": {
+              "type": "record",
+              "name": "Product",
+              "fields": [
+                {
+                  "name": "product_id",
+                  "type": "string"
+                },
+                {
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "name": "description",
+                  "type": "string"
+                },
+                {
+                  "name": "price",
+                  "type": "float"
+                },
+                {
+                  "name": "quantity",
+                  "type": "int"
+                },
+                {
+                  "name": "category",
+                  "type": {
+                    "type": "record",
+                    "name": "Category",
+                    "fields": [
+                      {
+                        "name": "category_id",
+                        "type": "string"
+                      },
+                      {
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "name": "description",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+
+===Protobuf
+{
+  "type": "record",
+  "name": "CatalogRequest",
+  "fields": [
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "action",
+      "type": "string"
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "ProductData",
+        "fields": [
+          {
+            "name": "product",
+            "type": {
+              "type": "record",
+              "name": "Product",
+              "fields": [
+                {
+                  "name": "product_id",
+                  "type": "string"
+                },
+                {
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "name": "description",
+                  "type": "string"
+                },
+                {
+                  "name": "price",
+                  "type": "float"
+                },
+                {
+                  "name": "quantity",
+                  "type": "int"
+                },
+                {
+                  "name": "category",
+                  "type": {
+                    "type": "record",
+                    "name": "Category",
+                    "fields": [
+                      {
+                        "name": "category_id",
+                        "type": "string"
+                      },
+                      {
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "name": "description",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+
+
+
+=== Оформление заказов
+* `orders.request` – Запрос на создание, изменение или отмену заказа.
+* `orders.response` – Ответ с подтверждением, статусом или ошибкой.
+
+=== Оплата
+* `payments.request` – Запрос на обработку платежа или возврата средств.
+* `payments.response` – Ответ с результатом платежа (успех, ошибка).
+
+=== Складская система
+* `warehouse.request` – Запрос на обновление остатков или поступления от поставщиков.
+* `warehouse.response` – Ответ с подтверждением изменений.
+
+=== Доставка
+* `delivery.request` – Запрос на отправку заказа или обновление статуса доставки.
+* `delivery.response` – Ответ с подтверждением или ошибкой.
+
+=== Управление магазинами
+* `stores.request` – Запрос на обновление наличия товаров или изменений акций в офлайн-магазинах.
+* `stores.response` – Ответ с подтверждением изменений.
+
+=== CRM и аналитика
+* `crm.request` – Запрос на обновление профиля клиента, запуск маркетинговой кампании или сбор аналитики.
+* `crm.response` – Ответ с подтверждением или отчетом.
+
+=== Пользователи и доступ
+* `users.request` – Запрос на аутентификацию, изменение ролей или логирование действий.
+* `users.response` – Ответ с подтверждением или ошибкой.
