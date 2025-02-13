@@ -26,10 +26,12 @@ paths:
             schema:
               type: object
               properties:
-                  example: "admin"
-                  assword:
-                  type: string
-                  example: "password123"
+                  example: 
+                    type: string
+                    example: "admin"
+                  password:
+                    type: string
+                    example: "password123"
       responses:
         '200':
           description: Успешный вход, получение токенов

@@ -268,6 +268,70 @@ paths:
         '204':
           description: Пользователь удален
 
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Регистрация нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Иван Иванов"
+                email:
+                  type: string
+                  format: email
+                  example: "ivan@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "securePassword123"
+                phone:
+                  type: string
+                  example: "+7-900-123-45-67"
+      responses:
+        '201':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                    example: "UUID-5678"
+                  name:
+                    type: string
+                    example: "Иван Иванов"
+                  email:
+                    type: string
+                    example: "ivan@example.com"
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request data"
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+
 components:
   schemas:
     Product:
@@ -330,3 +394,6 @@ components:
         permissions:
           type: string
           example: "read" 
+
+
+  
