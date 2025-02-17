@@ -11,6 +11,8 @@ tags:
     description: Информация о товарах
   - name: users
     description: Информация о пользователях
+  - name: auth
+    description: Авторизация 
 
 paths:
   /products:
@@ -268,17 +270,22 @@ paths:
         '204':
           description: Пользователь удален
 
-  /auth/register:
+  /auth/registration:
     post:
+      summary: Регистрация нового пользователя
+      description: Регистрация нового пользователя по почте и паролю
       tags:
         - auth
-      summary: Регистрация нового пользователя
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - name
+                - email
+                - password
               properties:
                 name:
                   type: string
@@ -286,14 +293,12 @@ paths:
                 email:
                   type: string
                   format: email
-                  example: "ivan@example.com"
+                  example: user@example.com
                 password:
                   type: string
                   format: password
-                  example: "securePassword123"
-                phone:
-                  type: string
-                  example: "+7-900-123-45-67"
+                  minLength: 6
+                  example: "password123"
       responses:
         '201':
           description: Пользователь успешно зарегистрирован
@@ -331,6 +336,296 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
+
+  /auth/authorization:
+    post:
+      summary: Авторизация пользователя
+      description: Авторизация пользователя
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: JWT access token for further requests
+                  refresh_token:
+                    type: string
+                    description: Token to refresh the access token
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request data"
+
+  /auth/logout:
+    post:
+      summary: Выход пользователя из системы
+      description: Выход пользователя из системы
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: Токен доступа JWT не действителен
+              required:
+                - token
+      responses:
+        '200':
+          description: Выход выполнен успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Result completed successfully"
+        '400':
+          description: Неверный токен или отсутствующий токен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request data"
+
+  /auth/forgot-password:
+    post:
+      summary: Запрос на сброс пароля
+      description: Отправляет ссылку для сброса пароля на указанный email пользователя
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Адрес электронной почты пользователя
+              required:
+                - email
+      responses:
+        '200':
+          description: Ссылка для сброса пароля отправлена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Ссылка для сброса пароля отправлена на вашу почту"
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request data"
+        '404':
+          description: Адрес электронной почты не найден в системе
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Адрес электронной почты не найден в системе"
+
+  /auth/reset-password:
+    post:
+      summary: Сброс пароля
+      description: Позволяет пользователю установить новый пароль, используя токен
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: Токен для сброса пароля
+                new_password:
+                  type: string
+                  description: Новый пароль пользователя
+              required:
+                - token
+                - new_password
+      responses:
+        '200':
+          description: Пароль успешно сброшен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Пароль успешно сброшен"
+        '400':
+          description: Некорректный пароль
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Неверный пароль"
+                  message:
+                    type: string
+                    example: "Новый пароль не соответствует требованиям безопасности"
+        '404':
+          description: Токен не найден или срок его действия истек
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Срок действия токена истек или он не найден"
+                  message:
+                    type: string
+                    example: "Токен для сброса пароля либо просрочен, либо недействителен"
+
+  /auth/whoami:
+    get:
+      summary: Получение информации о текущем пользователе
+      description: Возвращает данные о пользователе на основе переданного access token
+      tags:
+        - auth
+      responses:
+        '200':
+          description: Информация о пользователе получена успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 123
+                  email:
+                    type: string
+                    format: email
+                    example: "user@example.com"
+                  name:
+                    type: string
+                    example: "Иван Иванов"
+                  role:
+                    type: string
+                    example: "user"
+        '401':
+          description: Доступ запрещен (отсутствует или недействителен токен)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
+                  message:
+                    type: string
+                    example: "Access token is missing or invalid"
+
+  /auth/refresh-token:
+    post:
+      summary: Обновление access token
+      description: Позволяет обновить access token, используя refresh token
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: Refresh token пользователя
+              required:
+                - refresh_token
+      responses:
+        '200':
+          description: Новый access token успешно выдан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: Новый access token
+                  refresh_token:
+                    type: string
+                    description: Новый refresh token
+                  expires_in:
+                    type: integer
+                    example: 3600
+                    description: Время жизни access token в секундах
+        '401':
+          description: Недействительный или истекший refresh token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
+                  message:
+                    type: string
+                    example: "Токен обновления недействителен или срок его действия истек"
 
 components:
   schemas:
@@ -394,6 +689,3 @@ components:
         permissions:
           type: string
           example: "read" 
-
-
-  
