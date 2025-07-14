@@ -1,0 +1,48 @@
+@startuml user_registration_sequence
+title Последовательность регистрации пользователя
+
+actor Пользователь as user
+participant "Веб-интерфейс" as ui
+participant "API Gateway" as api
+participant "Сервис аутентификации" as auth
+participant "Email сервис" as email
+database "База данных" as db
+
+user -> ui : Заполняет форму регистрации
+user -> ui : Нажимает кнопку "Зарегистрироваться"
+
+ui -> api : Отправка POST запроса для регистрации нового пользователя
+activate api
+
+api -> auth : Регистрация нового пользователя
+activate auth
+
+auth -> email : Проверка уникальности email
+activate email
+email --> auth : Результат проверки
+deactivate email
+
+alt #lightgreen email уникален
+    auth -> db : Сохранение пользователя\n(с хешированным паролем)
+    activate db
+    db --> auth : ID нового пользователя
+    deactivate db
+    
+    auth -> auth : Генерация токена подтверждения
+    auth -> email : Отправка письма с подтверждением
+    activate email
+    email --> auth : OK
+    deactivate email
+    
+    auth --> api : Отправить сообщение об успешной регистрации
+    api --> ui : Отправить сообщение об успешной регистрации
+    ui -> user : Отправить сообщение об успешной регистрации
+    ui -> user : Перенаправить на страницу входа
+
+else #Pink email занят
+    auth --> api : Сообщить об ошибке "Email уже используется"
+    api --> ui : Сообщить об ошибке "Email уже используется"
+    ui -> user : Сообщить об ошибке "Email уже используется"
+
+end
+@enduml
