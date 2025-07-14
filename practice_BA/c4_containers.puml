@@ -8,15 +8,15 @@ Person(member, "Участник команды", "Выполняет задач
 Person(admin, "Администратор", "Управляет системой")
 
 System_Boundary(s1, "ProjectFlow") {
-  Container(web_app, "Веб-приложение", "React", "Пользовательский интерфейс (SPA)")
-  Container(api_gateway, "API Gateway", "Kong", "Единая точка входа для API")
+  Container(web_app, "Веб-приложение", "React", "Пользовательский интерфейс")
+  Container(api_gateway, "API Gateway", "Java", "Единая точка входа для API")
   
   Container(auth_service, "Сервис аутентификации", "Node.js", "Управление пользователями и доступом")
   Container(project_service, "Сервис проектов", "Spring Boot", "Логика управления проектами")
-  Container(task_service, "Сервис задач", "Spring Boot", "Управление задачами и сроками")
+  Container(task_service, "Сервис задач", "Python", "Управление задачами и сроками")
   Container(notification_service, "Сервис уведомлений", "Python", "Отправка email и push-уведомлений")
   
-  ContainerDb(database, "Основная БД", "PostgreSQL", "Хранение структурированных данных")
+  ContainerDb(database, "База Данных", "PostgreSQL", "Хранение структурированных данных")
 }
 
 System_Ext(email_system, "Email сервис", "SendGrid/SMTP")
@@ -30,10 +30,10 @@ Rel(api_gateway, auth_service, "Аутентификация", "JWT")
 Rel(api_gateway, project_service, "Управление проектами", "gRPC")
 Rel(api_gateway, task_service, "Управление задачами", "gRPC")
 
-Rel(auth_service, database, "Хранит данные пользователей", "JDBC")
-Rel(project_service, database, "Чтение/запись проектов", "Hibernate")
-Rel(task_service, database, "Чтение/запись задач", "Hibernate")
+Rel(auth_service, database, "Хранит данные пользователей")
+Rel(project_service, database, "Чтение/запись проектов")
+Rel(task_service, database, "Чтение/запись задач")
 
-Rel(task_service, notification_service, "События задач", "Kafka")
-Rel(notification_service, email_system, "Отправка писем", "SMTP")
+Rel(task_service, notification_service, "События задач")
+Rel(notification_service, email_system, "Отправка писем")
 @enduml
