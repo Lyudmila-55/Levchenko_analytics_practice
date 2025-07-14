@@ -1,7 +1,7 @@
 @startuml c4_context
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-title Система управления проектами - Контекстная диаграмма
+title C4 Context Diagram — Система управления проектами
 
 Person(manager, "Менеджер проекта", "Создает проекты, назначает задачи, контролирует выполнение")
 Person(member, "Участник команды", "Выполняет задачи, участвует в обсуждениях")

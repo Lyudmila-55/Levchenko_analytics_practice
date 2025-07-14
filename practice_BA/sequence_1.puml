@@ -1,5 +1,5 @@
 @startuml user_registration_sequence
-title Последовательность регистрации пользователя
+title Диаграмма последовательности "Регистрация пользователя"
 
 actor Пользователь as user
 participant "Веб-интерфейс" as ui

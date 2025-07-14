@@ -1,0 +1,41 @@
+@startuml profile_creation_sequence
+title Создание профиля пользователя
+
+actor Пользователь as user
+participant "Веб-интерфейс" as ui
+participant "API Gateway" as api
+participant "Сервис профилей" as profile
+database "База данных" as db
+
+user -> ui: Заполняет данные профиля
+user -> ui: Нажимает "Сохранить"
+
+ui -> api: Отправка POST запроса на создание профиля пользователя
+activate api
+
+api -> profile: Внесенеие данных в профиль
+activate profile
+
+profile -> db: Проверка данных пользователя
+activate db
+db --> profile: Результат проверки
+deactivate db
+
+alt #lightgreen Данные валидны
+    profile -> db: Сохранение данных
+    activate db
+    db --> profile: Результат сохранения
+    deactivate db
+    profile --> api: Результат сохранения данных (200 OK)
+    api --> ui: Успешное заполнение и сохранение данных
+    ui -> user: "Профиль сохранён"
+    ui -> user: Показ обновлённого профиля
+else #Pink Ошибка валидации
+    profile --> api: Результат проверки данных (400 Bad Request)
+    api --> ui: Список ошибок
+    ui -> user: Показать ошибки на экранной форме
+end
+
+deactivate profile
+deactivate api
+@enduml
