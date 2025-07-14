@@ -1,0 +1,49 @@
+@startuml c4_containers_final
+
+title Система управления проектами - Диаграмма контейнеров (финальная)
+
+Person(user, "Пользователь", "Менеджер, участник или администратор")
+
+System_Boundary(system, "ProjectFlow") {
+    Container(spa, "Веб-интерфейс", "React", "Одностраничное приложение")
+    
+    Container(api_gateway, "API Gateway", "Kong", "Маршрутизация API-запросов")
+    
+    Container(auth_service, "Сервис аутентификации", "Node.js", "Управление пользователями и доступом")
+    Container(projects_service, "Сервис проектов", "Java Spring", "Логика работы с проектами")
+    Container(tasks_service, "Сервис задач", "Java Spring", "Управление задачами")
+    Container(chat_service, "Сервис общения", "Node.js", "Чат и уведомления")
+    Container(calendar_service, "Сервис календаря", "Python", "Управление событиями")
+    Container(files_service, "Файловый сервис", "Python", "Хранение документов")
+    
+    ContainerDb(postgres, "Основная БД", "PostgreSQL", "Хранение данных системы")
+    ContainerBlob(s3, "Хранилище файлов", "AWS S3", "Хранение документов")
+}
+
+' Основные взаимодействия
+Rel(user, spa, "Работает через", "HTTPS")
+Rel(spa, api_gateway, "Вызывает API", "REST/HTTPS")
+
+' Маршрутизация API
+Rel(api_gateway, auth_service, "Аутентификация", "JWT")
+Rel(api_gateway, projects_service, "Запросы проектов", "REST/HTTP")
+Rel(api_gateway, tasks_service, "Запросы задач", "REST/HTTP")
+Rel(api_gateway, chat_service, "Сообщения", "WebSocket")
+Rel(api_gateway, calendar_service, "События", "REST/HTTP")
+Rel(api_gateway, files_service, "Файлы", "REST/HTTP")
+
+' Доступ к данным
+Rel(auth_service, postgres, "Хранит данные", "JDBC")
+Rel(projects_service, postgres, "Чтение/запись", "Hibernate")
+Rel(tasks_service, postgres, "Чтение/запись", "Hibernate")
+Rel(chat_service, postgres, "Хранит сообщения", "JDBC")
+Rel(calendar_service, postgres, "Хранит события", "SQLAlchemy")
+Rel(files_service, s3, "Сохраняет файлы", "AWS SDK")
+
+' Внешние интеграции
+System_Ext(email_service, "Email сервис", "SendGrid")
+Rel(chat_service, email_service, "Отправляет уведомления", "SMTP")
+
+System_Ext(push_service, "Push сервис", "Firebase Cloud Messaging")
+Rel(chat_service, push_service, "Отправляет уведомления", "HTTPS")
+@enduml
