@@ -1,49 +1,39 @@
-@startuml c4_containers_final
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-title Система управления проектами - Диаграмма контейнеров (финальная)
+title C4 Container Diagram — Система управления проектами
 
-Person(user, "Пользователь", "Менеджер, участник или администратор")
+Person(manager, "Менеджер проекта", "Создаёт проекты, назначает задачи")
+Person(member, "Участник команды", "Выполняет задачи")
+Person(admin, "Администратор", "Управляет системой")
 
-System_Boundary(system, "ProjectFlow") {
-    Container(spa, "Веб-интерфейс", "React", "Одностраничное приложение")
-    
-    Container(api_gateway, "API Gateway", "Kong", "Маршрутизация API-запросов")
-    
-    Container(auth_service, "Сервис аутентификации", "Node.js", "Управление пользователями и доступом")
-    Container(projects_service, "Сервис проектов", "Java Spring", "Логика работы с проектами")
-    Container(tasks_service, "Сервис задач", "Java Spring", "Управление задачами")
-    Container(chat_service, "Сервис общения", "Node.js", "Чат и уведомления")
-    Container(calendar_service, "Сервис календаря", "Python", "Управление событиями")
-    Container(files_service, "Файловый сервис", "Python", "Хранение документов")
-    
-    ContainerDb(postgres, "Основная БД", "PostgreSQL", "Хранение данных системы")
-    ContainerBlob(s3, "Хранилище файлов", "AWS S3", "Хранение документов")
+System_Boundary(s1, "ProjectFlow") {
+  Container(web_app, "Веб-приложение", "React", "Пользовательский интерфейс (SPA)")
+  Container(api_gateway, "API Gateway", "Kong", "Единая точка входа для API")
+  
+  Container(auth_service, "Сервис аутентификации", "Node.js", "Управление пользователями и доступом")
+  Container(project_service, "Сервис проектов", "Spring Boot", "Логика управления проектами")
+  Container(task_service, "Сервис задач", "Spring Boot", "Управление задачами и сроками")
+  Container(notification_service, "Сервис уведомлений", "Python", "Отправка email и push-уведомлений")
+  
+  ContainerDb(database, "Основная БД", "PostgreSQL", "Хранение структурированных данных")
 }
 
-' Основные взаимодействия
-Rel(user, spa, "Работает через", "HTTPS")
-Rel(spa, api_gateway, "Вызывает API", "REST/HTTPS")
+System_Ext(email_system, "Email сервис", "SendGrid/SMTP")
 
-' Маршрутизация API
+Rel(manager, web_app, "Использует", "HTTPS")
+Rel(member, web_app, "Использует", "HTTPS")
+Rel(admin, web_app, "Использует", "HTTPS")
+
+Rel(web_app, api_gateway, "Вызывает API", "REST/HTTPS")
 Rel(api_gateway, auth_service, "Аутентификация", "JWT")
-Rel(api_gateway, projects_service, "Запросы проектов", "REST/HTTP")
-Rel(api_gateway, tasks_service, "Запросы задач", "REST/HTTP")
-Rel(api_gateway, chat_service, "Сообщения", "WebSocket")
-Rel(api_gateway, calendar_service, "События", "REST/HTTP")
-Rel(api_gateway, files_service, "Файлы", "REST/HTTP")
+Rel(api_gateway, project_service, "Управление проектами", "gRPC")
+Rel(api_gateway, task_service, "Управление задачами", "gRPC")
 
-' Доступ к данным
-Rel(auth_service, postgres, "Хранит данные", "JDBC")
-Rel(projects_service, postgres, "Чтение/запись", "Hibernate")
-Rel(tasks_service, postgres, "Чтение/запись", "Hibernate")
-Rel(chat_service, postgres, "Хранит сообщения", "JDBC")
-Rel(calendar_service, postgres, "Хранит события", "SQLAlchemy")
-Rel(files_service, s3, "Сохраняет файлы", "AWS SDK")
+Rel(auth_service, database, "Хранит данные пользователей", "JDBC")
+Rel(project_service, database, "Чтение/запись проектов", "Hibernate")
+Rel(task_service, database, "Чтение/запись задач", "Hibernate")
 
-' Внешние интеграции
-System_Ext(email_service, "Email сервис", "SendGrid")
-Rel(chat_service, email_service, "Отправляет уведомления", "SMTP")
-
-System_Ext(push_service, "Push сервис", "Firebase Cloud Messaging")
-Rel(chat_service, push_service, "Отправляет уведомления", "HTTPS")
+Rel(task_service, notification_service, "События задач", "Kafka")
+Rel(notification_service, email_system, "Отправка писем", "SMTP")
 @enduml

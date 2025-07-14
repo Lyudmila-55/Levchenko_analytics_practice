@@ -1,0 +1,88 @@
+@startuml ProjectFlow_ER_Diagram
+
+hide circle
+skinparam linetype ortho
+skinparam packageStyle rectangle
+left to right direction
+
+
+entity User {
+  * id : UUID <<PK>>
+  --
+  * name : String
+  * email : String
+  * role : String
+  * is_active : Boolean
+  * last_login_at : DateTime
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity Project {
+  * id : UUID <<PK>>
+  --
+  * title : String
+  * description : Text
+  * status : String
+  * start_date : Date
+  * end_date : Date
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity Task {
+  * id : UUID <<PK>>
+  --
+  * title : String
+  * description : Text
+  * status : String
+  * priority : String
+  * due_date : Date
+  * start_date : Date
+  * estimated_time : Float
+  * spent_time : Float
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity File {
+  * id : UUID <<PK>>
+  --
+  * name : String
+  * url : String
+  * size : Integer
+  * created_at : DateTime
+}
+
+entity Message {
+  * id : UUID <<PK>>
+  --
+  * content : Text
+  * timestamp : DateTime
+}
+
+entity CalendarEvent {
+  * id : UUID <<PK>>
+  --
+  * title : String
+  * description : Text
+  * start_time : DateTime
+  * end_time : DateTime
+  * created_at : DateTime
+}
+
+' Связи между сущностями
+User "1" ||--o{ Project
+Project ||--o{ Task
+Project ||--o{ File
+Project ||--o{ Message
+Project ||--o{ CalendarEvent
+
+User ||--o{ Task
+User ||--o{ Task
+User ||--o{ File
+User ||--o{ Message
+User ||--o{ CalendarEvent
+
+Task }o--|| File
+@enduml

@@ -231,14 +231,17 @@ ER-Диаграмма для описания сущностей в базе д�
 
 == 5. Архитектура системы
 Диаграмма контекста
+[https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/main/practice_BA/%D1%814_context.puml]
 
 Диаграмма контейнеров
-
+[https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/main/practice_BA/c4_containers.puml]
 
 == 6. Взаимодействия компонентов системы
 Диаграмма последовательности “Регистрация пользователя”
+[https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/main/practice_BA/sequence_1.puml]
 
 Диаграмма последовательности "Создание профиля пользователя"
+[]
 
 Диаграмма последовательности "Создание проекта и задачи"
-
+[]

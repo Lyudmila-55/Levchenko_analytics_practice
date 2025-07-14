@@ -1,4 +1,5 @@
 @startuml c4_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 title Система управления проектами - Контекстная диаграмма
 
@@ -6,12 +7,12 @@ Person(manager, "Менеджер проекта", "Создает проект�
 Person(member, "Участник команды", "Выполняет задачи, участвует в обсуждениях")
 Person(admin, "Администратор", "Управляет пользователями и настройками системы")
 
-System(projectflow, "ProjectFlow", "Платформа для управления проектами и командной работы")
+System(projectflow, "projectFlow", "Платформа для управления проектами и командной работы")
 
-Rel(manager, projectflow, "Управляет проектами через")
-Rel(member, projectflow, "Работает с задачами через")
-Rel(admin, projectflow, "Администрирует систему через")
+Rel(manager, projectflow, "Управляет проектами")
+Rel(member, projectflow, "Работает с задачами")
+Rel(admin, projectflow, "Администрирует систему")
 
 System_Ext(email, "Email сервис", "Внешний сервис электронной почты")
-Rel(projectflow, email, "Отправляет уведомления через")
+Rel(projectflow, email, "Отправляет уведомления")
 @enduml
