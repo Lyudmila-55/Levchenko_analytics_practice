@@ -1,0 +1,71 @@
+@startuml 
+title Создание проекта и задачи
+
+actor Менеджер as manager
+participant "Веб-интерфейс" as ui
+participant "API Gateway" as api
+participant "Сервис проектов" as project
+participant "Сервис задач" as task
+database "База данных" as db
+
+manager -> ui: Нажимает "Создать проект"
+manager -> ui: Заполняет данные проекта
+ui -> api: Отправка POST запроса на создание проекта
+activate api
+api -> project: Создание нового проекта
+activate project
+project -> db: Проверка данных проекта
+activate db
+db --> project: Результат проверки
+deactivate db
+
+alt #lightgreen Данные валидны
+    project -> db: Сохранение проекта
+    activate db
+    db --> project: ID проекта
+    deactivate db
+    
+    project --> api: Результат создания (201 Created)
+    api --> ui: Успешное создание проекта
+    ui -> manager: "Проект успешно создан"
+    ui -> manager: Отображение созданного проекта
+    
+    == Создание задачи ==
+    manager -> ui: Заполняет данные задачи
+    manager -> ui: Нажимает "Добавить задачу"
+    
+    ui -> api: Отправка POST запроса на создание задачи
+    api -> task: Создание новой задачи
+    activate task
+    
+    task -> db: Проверка данных задачи
+    activate db
+    db --> task: Результат проверки
+    deactivate db
+    
+    alt #lightgreen Данные валидны
+        task -> db: Сохранение задачи
+        activate db
+        db --> task: ID задачи
+        deactivate db
+        
+        task --> api: Результат создания (201 Created)
+        api --> ui: Успешное создание задачи
+        ui -> manager: "Задача успешно создана"
+        ui -> manager: Обновление списка задач
+    else #Pink Ошибка валидации
+        task --> api: Результат проверки (400 Bad Request)
+        api --> ui: Список ошибок
+        ui -> manager: Показать ошибки в форме
+    end
+    deactivate task
+    
+else #Pink Ошибка валидации
+    project --> api: Результат проверки (400 Bad Request)
+    api --> ui: Список ошибок
+    ui -> manager: Показать ошибки в форме
+end
+
+deactivate project
+deactivate api
+@enduml
