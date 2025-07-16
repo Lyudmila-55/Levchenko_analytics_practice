@@ -1,4 +1,4 @@
-@startuml 
+@startuml task_and_project_creation_sequence
 title Создание проекта и задачи
 
 actor Менеджер as manager
