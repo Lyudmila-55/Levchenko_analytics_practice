@@ -53,15 +53,16 @@
 Приложение «НаПоправку» имеет простой и понятный интерфейс, состоящий из нескольких основных разделов:
 
 - **Главный экран (Панель приборов):** Даёт быстрый доступ к диагностике, акциям, разовым консультациям и другим услугам. Здесь собраны все основные возможности приложения.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/tree/practice-BA/test/IMG_1051.png)
+![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1051.PNG)
 - **Чат с врачом:** Позволяет напрямую общаться с медицинскими специалистами в онлайн-режиме. Можно задавать вопросы, отправлять фото анализов и получать консультации.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/tree/practice-BA/test/IMG_1052.png)
+![Скриншот](hhttps://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1052.PNG)
 - **Записи:** Здесь можно записываться на приёмы к врачам, просматривать расписание, добавлять напоминания и заметки к предстоящим визитам.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/tree/practice-BA/test/IMG_1053.png)
+![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1053.PNG)
 - **Здоровье:** Включает дневник симптомов, онлайн-тесты, электронную медкарту и инструменты самодиагностики. Помогает отслеживать состояние здоровья.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/tree/practice-BA/test/IMG_1054.png)
+![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1054.PNG)
 - **Профиль:** Содержит личные данные, настройки уведомлений, медицинские документы и другие параметры аккаунта. Тут же доступна техническая поддержка.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/tree/practice-BA/test/IMG_1055.png)
+![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1055.PNG)
+
 
 ## Раздел "Записи"
 ### Запись на процедуру:
@@ -153,3 +154,4 @@
 **По электронной почте:** support@napopравку.ru (официальный адрес поддержки).
 
 Мы гарантируем конфиденциальность вашего обращения и стремимся решить любые технические вопросы в кратчайшие сроки. Ваше удобство и комфорт при использовании приложения - наш главный приоритет.
+
