@@ -53,15 +53,24 @@
 Приложение «НаПоправку» имеет простой и понятный интерфейс, состоящий из нескольких основных разделов:
 
 - **Главный экран (Панель приборов):** Даёт быстрый доступ к диагностике, акциям, разовым консультациям и другим услугам. Здесь собраны все основные возможности приложения.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1051.PNG)
+
+<img src="https://github.com/Lyudmila-55/Levchenko_analytics_practice/raw/practice-BA/test/IMG_1051.PNG" width="200" alt="Главный экран">
+
 - **Чат с врачом:** Позволяет напрямую общаться с медицинскими специалистами в онлайн-режиме. Можно задавать вопросы, отправлять фото анализов и получать консультации.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1052.PNG)
+
+<img src="https://github.com/Lyudmila-55/Levchenko_analytics_practice/raw/practice-BA/test/IMG_1052.PNG" width="200" alt="Главный экран">
+
 - **Записи:** Здесь можно записываться на приёмы к врачам, просматривать расписание, добавлять напоминания и заметки к предстоящим визитам.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1053.PNG)
+
+<img src="https://github.com/Lyudmila-55/Levchenko_analytics_practice/raw/practice-BA/test/IMG_1053.PNG" width="200" alt="Главный экран">
+
 - **Здоровье:** Включает дневник симптомов, онлайн-тесты, электронную медкарту и инструменты самодиагностики. Помогает отслеживать состояние здоровья.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1054.PNG)
+
+<img src="https://github.com/Lyudmila-55/Levchenko_analytics_practice/raw/practice-BA/test/IMG_1054.PNG" width="200" alt="Главный экран">
+
 - **Профиль:** Содержит личные данные, настройки уведомлений, медицинские документы и другие параметры аккаунта. Тут же доступна техническая поддержка.
-![Скриншот](https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/test/IMG_1055.PNG)
+
+<img src="https://github.com/Lyudmila-55/Levchenko_analytics_practice/raw/practice-BA/test/IMG_1055.PNG" width="200" alt="Главный экран">
 
 
 ## Раздел "Записи"
