@@ -244,6 +244,5 @@ https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/pra
 https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_2.puml
 
 Диаграмма последовательности "Создание проекта и задачи"
-image::https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/S_3.png [Alt Диаграмма последовательности "Создание проекта и задачи", width=500, height=300]
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/S_3.png[Диаграмма последовательности "Создание проекта и задачи", width=500, height=300]
 https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_3.puml
-
