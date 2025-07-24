@@ -227,24 +227,41 @@ NFR10::Система должна поддерживать локализаци
 
 === 4.2. ER-Диаграмма
 ER-Диаграмма для описания сущностей в базе данных
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/ER.puml
+
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/ER.png[ER-Диаграмма, width=700]
+
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/ER.puml[Ссылка на диаграмму PlantUML]
 
 == 5. Архитектура системы
 Диаграмма контекста
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/%D1%814_context.puml
+
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/c4_context.png[Диаграмма контекста, width=700]
+
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/%D1%814_context.puml[Ссылка на диаграмму PlantUML]
 
 Диаграмма контейнеров
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/c4_containers.puml
+
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/c4_conteiner.png[Диаграмма контейнеров, width=700]
+
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/c4_containers.puml[Ссылка на диаграмму PlantUML]
 
 == 6. Взаимодействия компонентов системы
 Диаграмма последовательности “Регистрация пользователя”
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_1.puml
+
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/S_1.png[Диаграмма последовательности “Регистрация пользователя”, width=700, height=300]
+
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_1.puml[Ссылка на диаграмму PlantUML]
+
 
 Диаграмма последовательности "Создание профиля пользователя"
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_2.puml
+
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/S_2.png[Диаграмма последовательности "Создание профиля пользователя", width=700, height=300]
+
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_2.puml[Ссылка на диаграмму PlantUML]
+
 
 Диаграмма последовательности "Создание проекта и задачи"
 
-image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/S_3.png[Диаграмма последовательности "Создание проекта и задачи", width=500, height=300]
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/Diagrams/S_3.png[Диаграмма последовательности "Создание проекта и задачи", width=700, height=300]
 
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_3.puml
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_3.puml[Ссылка на диаграмму PlantUML]
