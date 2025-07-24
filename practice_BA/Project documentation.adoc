@@ -1,4 +1,4 @@
- тимс] имсч= Документация к системе управления проектами
+= Документация к системе управления проектами
 
 == Введение
 Документация описывает подсистему для менеджеров проектов и членов команд, которая позволит им
@@ -99,7 +99,7 @@
 
 === 1.2 Диаграмма бизнес-процессов (BPMN)
 Диаграмма бизнес-процесса "Регистрация и вход пользователя" в нотации BPMN  
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/BPMN%20diagram.png
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/BPMN/BPMN%20diagram.PNG
 
 == 2. Заинтересованные стороны
 |===
@@ -227,21 +227,21 @@ NFR10:: Система должна поддерживать локализац�
 
 === 4.2. ER-Диаграмма
 ER-Диаграмма для описания сущностей в базе данных
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/ER.puml
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/ER.puml
 
 == 5. Архитектура системы
 Диаграмма контекста
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/%D1%814_context.puml
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/%D1%814_context.puml
 
 Диаграмма контейнеров
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/c4_containers.puml
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/c4_containers.puml
 
 == 6. Взаимодействия компонентов системы
 Диаграмма последовательности “Регистрация пользователя”
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/sequence_1.puml
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_1.puml
 
 Диаграмма последовательности "Создание профиля пользователя"
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/sequence_2.puml
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_2.puml
 
 Диаграмма последовательности "Создание проекта и задачи"
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/sequence_3.puml
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/Diagrams/sequence_3.puml
