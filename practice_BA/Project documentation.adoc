@@ -146,11 +146,11 @@ C4 в PlantUML. Эта диаграмма должна отображать ос
 4. Архивация    
 
 === 1.2 Диаграмма бизнес-процессов (BPMN)
-Диаграмма бизнес-процесса "Регистрация и вход пользователя" в нотации BPMN  
+Диаграмма бизнес-процесса "Планирование и распределение задач" в нотации BPMN  
 
-image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/BPMN/New%20BPMN%20diagram.png[Диаграмма BPMN, width=500]
+image::https://raw.githubusercontent.com/Lyudmila-55/Levchenko_analytics_practice/practice-BA/practice_BA/BPMN/New%20BPMN%20diagram_1.png[Диаграмма BPMN, width=500]
 
-https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/BPMN/New%20BPMN%20diagram%20(1).bpmn[Ссылка на диаграмму PlantUML]
+https://github.com/Lyudmila-55/Levchenko_analytics_practice/blob/practice-BA/practice_BA/BPMN/New%20BPMN%20diagram%20_1.bpmn[Ссылка на диаграмму PlantUML]
 
 
 == 2. Заинтересованные стороны
